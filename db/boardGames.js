@@ -4,10 +4,11 @@ const util = require('util');
 // GET - /api/board-games - get all board games
 async function getAllBoardGames() {
     try {
-        const { rows } = await client.query(`
+        const { rows: boardGames } = await client.query(`
             SELECT * FROM boardgames;
         `);
-        return rows;
+
+        return boardGames;
     } catch (err) {
         throw err;
     }
@@ -32,10 +33,11 @@ async function createBoardGame(body) {
     try {
         const { rows: [boardGame] } = await client.query(`
 
-            INSERT INTO boardgames(name, description, price, "inStock", "isPopular", "imgUrl")
-            VALUES($1, $2, $3, $4, $5, $6)
+            INSERT INTO boardgames(name, description, price)
+            VALUES($1, $2, $3)
             RETURNING *;
-        `, [name, description, price, inStock, isPopular, imgUrl]);
+        `, [name, description, price]);
+
         return boardGame;
     } catch (error) {
         throw error;
@@ -45,9 +47,11 @@ async function createBoardGame(body) {
 // PUT - /api/board-games/:id - update a single board game by id
 async function updateBoardGame(id, fields = {}) {
     const setString = Object.keys(fields).map((key, index) => `"${key}"=$${index + 1}`).join(', ');
+
     if (setString.length === 0) {
         return;
     }
+    
     try {
         const { rows: [boardGame] } = await client.query(`
             UPDATE boardgames

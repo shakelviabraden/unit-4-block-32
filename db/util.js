@@ -18,3 +18,7 @@ function dbFields(fields) {
   module.exports = {
     dbFields,
   }
+
+
+  //it does not appear that we are using this in our code anywhere?????
+  

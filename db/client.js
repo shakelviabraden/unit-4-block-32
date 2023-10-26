@@ -1,10 +1,10 @@
 const { Client } = require('pg');
 
-const connectionString = process.env.DATABASE_URL || 'https://localhost:5432/gamestore';
-
 const client = new Client({
-  connectionString,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
+  user: 'postgres',
+  database: "gamestore",
+  password: 'postgres',
+  port: 5432
 });
 
 module.exports = client;
